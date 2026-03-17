@@ -25,7 +25,6 @@
                 <thead>
                     <tr class="border-b border-gray-200 dark:border-gray-800">
                         <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Role</th>
-                        <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Permissions</th>
                         <th class="px-5 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">Aksi</th>
                     </tr>
                 </thead>
@@ -33,15 +32,6 @@
                     @forelse($roles as $role)
                         <tr>
                             <td class="px-5 py-4 text-sm font-medium text-gray-800 dark:text-white/90">{{ $role->name }}</td>
-                            <td class="px-5 py-4">
-                                <div class="flex flex-wrap gap-1">
-                                    @forelse($role->permissions as $permission)
-                                        <span class="inline-flex rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">{{ $permission->name }}</span>
-                                    @empty
-                                        <span class="text-sm text-gray-400">-</span>
-                                    @endforelse
-                                </div>
-                            </td>
                             <td class="px-5 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('roles.edit', $role) }}" class="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
@@ -60,7 +50,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada role</td>
+                            <td colspan="2" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada role</td>
                         </tr>
                     @endforelse
                 </tbody>

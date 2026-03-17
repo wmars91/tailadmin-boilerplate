@@ -14,10 +14,10 @@ Boilerplate project Laravel 12 + TailAdmin dengan fitur lengkap untuk admin dash
 ## Fitur
 
 - ✅ Login menggunakan **username** (bukan email)
-- ✅ Dynamic menu dari database dengan permission-based filtering
+- ✅ Dynamic menu dari database dengan filter berdasar **Role** (Many-to-Many Multi-Checkbox)
 - ✅ CRUD Menu Management
 - ✅ CRUD User Management + assign role
-- ✅ CRUD Role Management + assign permissions
+- ✅ CRUD Role Management
 - ✅ Dark mode support
 - ✅ Responsive sidebar
 
@@ -84,9 +84,9 @@ app/
 ├── Helpers/
 │   └── MenuHelper.php          # Dynamic menu dari database
 ├── Http/Controllers/
-│   ├── MenuController.php      # CRUD Menu
-│   ├── UserController.php      # CRUD User + Role
-│   └── RoleController.php      # CRUD Role + Permission
+│   ├── MenuController.php      # CRUD Menu (dengan multiple Role checkbox)
+│   ├── UserController.php      # CRUD User + assign Role
+│   └── RoleController.php      # CRUD Role
 ├── Models/
 │   ├── User.php                # + HasRoles, custom fields
 │   └── Menu.php                # Menu model (parent-child)
