@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Menu extends Model
+{
+    protected $fillable = [
+        'name',
+        'icon',
+        'route',
+        'url',
+        'parent_id',
+        'group_name',
+        'order',
+        'permission',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Menu::class, 'parent_id')->orderBy('order');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Menu::class, 'parent_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('order');
+    }
+
+    public function scopeParentMenus($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+}
