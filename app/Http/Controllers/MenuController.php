@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -19,7 +20,8 @@ class MenuController extends Controller
     public function create()
     {
         $parentMenus = Menu::parentMenus()->ordered()->get();
-        return view('menus.create', compact('parentMenus'));
+        $roles = Role::all();
+        return view('menus.create', compact('parentMenus', 'roles'));
     }
 
     public function store(Request $request)
@@ -32,13 +34,27 @@ class MenuController extends Controller
             'parent_id' => 'nullable|exists:menus,id',
             'group_name' => 'required|string|max:255',
             'order' => 'required|integer|min:0',
-            'permission' => 'nullable|string|max:255',
             'is_active' => 'boolean',
+            'roles' => 'nullable|array',
+            'roles.*' => 'exists:roles,id',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
 
-        Menu::create($validated);
+        $menu = Menu::create([
+            'name' => $validated['name'],
+            'icon' => $validated['icon'] ?? null,
+            'route' => $validated['route'] ?? null,
+            'url' => $validated['url'] ?? null,
+            'parent_id' => $validated['parent_id'] ?? null,
+            'group_name' => $validated['group_name'],
+            'order' => $validated['order'],
+            'is_active' => $validated['is_active'],
+        ]);
+
+        if (in_array('roles', array_keys($validated)) && !empty($validated['roles'])) {
+            $menu->roles()->sync($validated['roles']);
+        }
 
         return redirect()->route('menus.index')
             ->with('success', 'Menu berhasil ditambahkan.');
@@ -51,7 +67,10 @@ class MenuController extends Controller
             ->ordered()
             ->get();
 
-        return view('menus.edit', compact('menu', 'parentMenus'));
+        $roles = Role::all();
+        $menuRoles = $menu->roles->pluck('id')->toArray();
+
+        return view('menus.edit', compact('menu', 'parentMenus', 'roles', 'menuRoles'));
     }
 
     public function update(Request $request, Menu $menu)
@@ -64,13 +83,25 @@ class MenuController extends Controller
             'parent_id' => 'nullable|exists:menus,id',
             'group_name' => 'required|string|max:255',
             'order' => 'required|integer|min:0',
-            'permission' => 'nullable|string|max:255',
             'is_active' => 'boolean',
+            'roles' => 'nullable|array',
+            'roles.*' => 'exists:roles,id',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
 
-        $menu->update($validated);
+        $menu->update([
+            'name' => $validated['name'],
+            'icon' => $validated['icon'] ?? null,
+            'route' => $validated['route'] ?? null,
+            'url' => $validated['url'] ?? null,
+            'parent_id' => $validated['parent_id'] ?? null,
+            'group_name' => $validated['group_name'],
+            'order' => $validated['order'],
+            'is_active' => $validated['is_active'],
+        ]);
+
+        $menu->roles()->sync($validated['roles'] ?? []);
 
         return redirect()->route('menus.index')
             ->with('success', 'Menu berhasil diperbarui.');

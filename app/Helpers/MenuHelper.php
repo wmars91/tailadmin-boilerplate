@@ -15,16 +15,23 @@ class MenuHelper
             ->ordered()
             ->parentMenus()
             ->with(['children' => function ($query) {
-                $query->active()->ordered();
-            }])
+                $query->active()->ordered()->with('roles');
+            }, 'roles'])
             ->get();
 
         $grouped = [];
 
         foreach ($menus as $menu) {
-            // Cek permission jika ada
-            if ($menu->permission && $user && !$user->can($menu->permission)) {
-                continue;
+            // Cek akses role jika punya pembatasan
+            if ($menu->roles->count() > 0 && $user && !$user->hasRole('superadmin')) {
+                $hasAccess = false;
+                foreach ($menu->roles as $role) {
+                    if ($user->hasRole($role->name)) {
+                        $hasAccess = true;
+                        break;
+                    }
+                }
+                if (!$hasAccess) continue;
             }
 
             $groupName = $menu->group_name ?? 'Menu';
@@ -45,8 +52,15 @@ class MenuHelper
             // Cek children
             $children = [];
             foreach ($menu->children as $child) {
-                if ($child->permission && $user && !$user->can($child->permission)) {
-                    continue;
+                if ($child->roles->count() > 0 && $user && !$user->hasRole('superadmin')) {
+                    $hasChildAccess = false;
+                    foreach ($child->roles as $role) {
+                        if ($user->hasRole($role->name)) {
+                            $hasChildAccess = true;
+                            break;
+                        }
+                    }
+                    if (!$hasChildAccess) continue;
                 }
 
                 $children[] = [

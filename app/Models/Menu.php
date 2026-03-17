@@ -16,13 +16,17 @@ class Menu extends Model
         'parent_id',
         'group_name',
         'order',
-        'permission',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(\Spatie\Permission\Models\Role::class, 'menu_role');
+    }
 
     public function children(): HasMany
     {

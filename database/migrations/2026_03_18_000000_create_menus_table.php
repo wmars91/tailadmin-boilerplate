@@ -17,11 +17,15 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('group_name')->default('Menu');
             $table->integer('order')->default(0);
-            $table->string('permission')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
             $table->foreign('parent_id')->references('id')->on('menus')->onDelete('cascade');
+        });
+
+        Schema::create('menu_role', function (Blueprint $table) {
+            $table->foreignId('menu_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
         });
     }
 

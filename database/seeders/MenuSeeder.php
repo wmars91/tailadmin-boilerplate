@@ -25,29 +25,29 @@ class MenuSeeder extends Seeder
             'icon' => 'user-management',
             'group_name' => 'Settings',
             'order' => 10,
-            'permission' => 'manage-users',
             'is_active' => true,
         ]);
+        $userMgmt->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'admin')->first()->id]);
 
-        Menu::create([
+        $users = Menu::create([
             'name' => 'Users',
             'route' => 'users.index',
             'parent_id' => $userMgmt->id,
             'group_name' => 'Settings',
             'order' => 1,
-            'permission' => 'manage-users',
             'is_active' => true,
         ]);
+        $users->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'admin')->first()->id]);
 
-        Menu::create([
+        $roles = Menu::create([
             'name' => 'Roles',
             'route' => 'roles.index',
             'parent_id' => $userMgmt->id,
             'group_name' => 'Settings',
             'order' => 2,
-            'permission' => 'manage-roles',
             'is_active' => true,
         ]);
+        $roles->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'admin')->first()->id]);
 
         // Menu Management
         Menu::create([
@@ -56,7 +56,6 @@ class MenuSeeder extends Seeder
             'route' => 'menus.index',
             'group_name' => 'Settings',
             'order' => 20,
-            'permission' => 'manage-menus',
             'is_active' => true,
         ]);
     }

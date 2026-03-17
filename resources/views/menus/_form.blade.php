@@ -48,10 +48,19 @@
         @error('order') <p class="mt-1 text-sm text-error-500">{{ $message }}</p> @enderror
     </div>
 
-    <div>
-        <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Permission</label>
-        <input type="text" name="permission" value="{{ old('permission', $menu->permission ?? '') }}" class="{{ $input }}" placeholder="e.g. manage-users" />
-        @error('permission') <p class="mt-1 text-sm text-error-500">{{ $message }}</p> @enderror
+    <div class="md:col-span-2">
+        <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Hak Akses Role</label>
+        <div class="flex flex-wrap gap-3">
+            @foreach($roles as $role)
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="roles[]" value="{{ $role->id }}" {{ in_array($role->id, old('roles', $menuRoles ?? [])) ? 'checked' : '' }}
+                        class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800" />
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ $role->name }}</span>
+                </label>
+            @endforeach
+        </div>
+        @error('roles') <p class="mt-1 text-sm text-error-500">{{ $message }}</p> @enderror
+        <p class="mt-2 text-xs text-gray-500">Kosongkan jika menu ini bersifat publik (bisa diakses semua user yang login).</p>
     </div>
 
     <div class="flex items-center gap-3 pt-6">

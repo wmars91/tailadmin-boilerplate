@@ -44,13 +44,17 @@
                             <td class="px-5 py-4 text-sm text-gray-500">{{ $menu->parent?->name ?? '-' }}</td>
                             <td class="px-5 py-4 text-sm text-gray-500">{{ $menu->order }}</td>
                             <td class="px-5 py-4">
-                                @if($menu->is_active)
-                                    <span class="inline-flex rounded-full bg-success-50 px-2 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">Aktif</span>
+                                @if($menu->roles->count() > 0)
+                                    <div class="flex flex-wrap gap-1">
+                                        @foreach($menu->roles as $role)
+                                            <span class="inline-flex rounded-full bg-brand-50 px-2 py-1 text-xs font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">{{ $role->name }}</span>
+                                        @endforeach
+                                    </div>
                                 @else
-                                    <span class="inline-flex rounded-full bg-error-50 px-2 py-1 text-xs font-medium text-error-700 dark:bg-error-500/10 dark:text-error-400">Nonaktif</span>
+                                    <span class="text-xs text-gray-400">Semua (Publik)</span>
                                 @endif
                             </td>
-                            <td class="px-5 py-4 text-right">
+                            <td class="px-5 py-4">
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('menus.edit', $menu) }}" class="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
                                         <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M14.166 2.5l3.334 3.334M2.5 17.5l.833-3.75L13.75 3.333l3.333 3.334L6.667 17.083 2.5 17.5z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
