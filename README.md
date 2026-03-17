@@ -102,6 +102,9 @@ resources/views/
 └── auth/login.blade.php        # Login (username)
 ```
 
+📚 **Ingin membuat menu baru dan membatasinya untuk hak akses (Role) tertentu?** 
+Baca panduan lengkapnya di sini: **[Panduan Manajemen Menu, Role & Permission](panduan_menu_dan_role.md)**.
+
 ## Custom User Fields
 
 | Field       | Deskripsi         |
