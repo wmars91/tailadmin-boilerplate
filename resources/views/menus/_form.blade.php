@@ -7,10 +7,40 @@
         @error('name') <p class="mt-1 text-sm text-error-500">{{ $message }}</p> @enderror
     </div>
 
-    <div>
+    <div x-data="{ selectedIcon: '{{ old('icon', $menu->icon ?? '') }}' }">
         <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Icon</label>
-        <input type="text" name="icon" value="{{ old('icon', $menu->icon ?? '') }}" class="{{ $input }}" placeholder="e.g. dashboard, user-management" />
+        <div class="flex items-center gap-3">
+            <select name="icon" x-model="selectedIcon" class="{{ $input }} cursor-pointer">
+                <option value="">-- Tanpa Icon / Default --</option>
+                @foreach(\App\Helpers\MenuHelper::getAvailableIcons() as $iconKey)
+                    <option value="{{ $iconKey }}">{{ ucwords(str_replace('-', ' ', $iconKey)) }}</option>
+                @endforeach
+            </select>
+            
+            <!-- Icon Preview Box -->
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 shadow-theme-xs dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-400">
+                <template x-if="selectedIcon">
+                    <span class="[&>svg]:h-5 [&>svg]:w-5" x-html="getIconSvg(selectedIcon)"></span>
+                </template>
+                <template x-if="!selectedIcon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </template>
+            </div>
+        </div>
         @error('icon') <p class="mt-1 text-sm text-error-500">{{ $message }}</p> @enderror
+        
+        <!-- Alpine JS helper for fetching SVG string (static fallback in JS to avoid large payload, but passing it from PHP is better if small) -->
+        <script>
+            function getIconSvg(iconName) {
+                const icons = {
+                    @foreach(\App\Helpers\MenuHelper::getAvailableIcons() as $iconKey)
+                    '{{ $iconKey }}': `{!! addslashes(\App\Helpers\MenuHelper::getIconSvg($iconKey)) !!}`,
+                    @endforeach
+                };
+                
+                return icons[iconName] || `{!! addslashes(\App\Helpers\MenuHelper::getIconSvg('default')) !!}`;
+            }
+        </script>
     </div>
 
     <div>
