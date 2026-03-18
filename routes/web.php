@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,10 +23,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
 
-    // App Settings (Only Superadmin)
+    // App Settings & Audit Logs (Only Superadmin)
     Route::middleware(['role:superadmin'])->group(function () {
         Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
+        Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 });
 

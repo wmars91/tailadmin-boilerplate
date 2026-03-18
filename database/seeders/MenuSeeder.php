@@ -59,6 +59,16 @@ class MenuSeeder extends Seeder
         ]);
         $settings->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->id]);
 
+        $auditLogs = Menu::create([
+            'name' => 'Audit Logs',
+            'route' => 'activity-logs.index',
+            'parent_id' => $userMgmt->id,
+            'group_name' => 'Settings',
+            'order' => 20,
+            'is_active' => true,
+        ]);
+        $auditLogs->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->id]);
+
         // Menu Management
         Menu::create([
             'name' => 'Menu Management',
