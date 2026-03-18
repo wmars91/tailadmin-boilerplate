@@ -51,8 +51,8 @@ class MenuSeeder extends Seeder
 
         $settings = Menu::create([
             'name' => 'Pengaturan Aplikasi',
+            'icon' => 'settings',
             'route' => 'settings.index',
-            'parent_id' => $userMgmt->id,
             'group_name' => 'Settings',
             'order' => 15,
             'is_active' => true,
@@ -61,8 +61,8 @@ class MenuSeeder extends Seeder
 
         $auditLogs = Menu::create([
             'name' => 'Audit Logs',
+            'icon' => 'document',
             'route' => 'activity-logs.index',
-            'parent_id' => $userMgmt->id,
             'group_name' => 'Settings',
             'order' => 20,
             'is_active' => true,
