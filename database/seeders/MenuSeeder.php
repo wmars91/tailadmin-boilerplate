@@ -49,6 +49,16 @@ class MenuSeeder extends Seeder
         ]);
         $roles->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'admin')->first()->id]);
 
+        $settings = Menu::create([
+            'name' => 'Pengaturan Aplikasi',
+            'route' => 'settings.index',
+            'parent_id' => $userMgmt->id,
+            'group_name' => 'Settings',
+            'order' => 15,
+            'is_active' => true,
+        ]);
+        $settings->roles()->sync([\Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->id]);
+
         // Menu Management
         Menu::create([
             'name' => 'Menu Management',

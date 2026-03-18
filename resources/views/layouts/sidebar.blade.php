@@ -58,17 +58,15 @@
     }"
     @mouseenter="if (!$store.sidebar.isExpanded) $store.sidebar.setHovered(true)"
     @mouseleave="$store.sidebar.setHovered(false)">
-    <!-- Logo Section -->
     <div class="pt-8 pb-7 flex"
         :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
         'xl:justify-center' :
         'justify-start'">
         <a href="/">
             <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width="150" height="40" />
+                class="dark:hidden" src="{{ \App\Helpers\SettingHelper::get('app_logo') ? asset(\App\Helpers\SettingHelper::get('app_logo')) : '/images/logo/logo.svg' }}" alt="Logo" style="max-width: 150px; max-height: 40px" />
             <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width="150"
-                height="40" />
+                class="hidden dark:block" src="{{ \App\Helpers\SettingHelper::get('app_logo') ? asset(\App\Helpers\SettingHelper::get('app_logo')) : '/images/logo/logo-dark.svg' }}" alt="Logo" style="max-width: 150px; max-height: 40px" />
             <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                 src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
 

@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
         // Seeder menus
         $this->call(MenuSeeder::class);
 
+        // Seeder settings
+        $this->call(SettingSeeder::class);
+
         // Create admin user
         $admin = User::create([
             'name' => 'Administrator',
